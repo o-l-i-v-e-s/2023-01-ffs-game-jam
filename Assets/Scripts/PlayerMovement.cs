@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rigidBody;
-    [SerializeField] float speed = 100f;
+    [SerializeField] float speed = 500f;
+    [SerializeField] float moveLimiter = 0.71f;
 
     private void Start()
     {
@@ -21,17 +22,18 @@ public class PlayerMovement : MonoBehaviour
         HandleMovement();
     }
 
-    void Update()
-    {
-    }
-
     private void HandleMovement()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
-        //Vector2 direction = new Vector2(horizontalMovement, verticalMovement);
-        //rigidBody.AddForce(direction * speed * Time.fixedDeltaTime);
 
-        rigidBody.velocity = transform.right * horizontalMovement * speed * Time.fixedDeltaTime + transform.up * verticalMovement * speed * Time.fixedDeltaTime;
+        // limit diagonal movement because it is faster than cardinal movement
+        if (horizontalMovement != 0 && verticalMovement != 0)
+        {
+            horizontalMovement *= moveLimiter;
+            verticalMovement *= moveLimiter;
+        }
+
+        rigidBody.velocity = (transform.right * horizontalMovement * Time.fixedDeltaTime + transform.up * verticalMovement * Time.fixedDeltaTime) * speed;
     }
 }
