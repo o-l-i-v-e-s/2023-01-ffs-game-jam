@@ -8,12 +8,10 @@ public class Fadable : MonoBehaviour
     SpriteRenderer spriteRenderer;
     string status;
     [SerializeField] float fadedAlpha = 0.2f;
-    float fadeProgress;
     private bool isCollidingWithPlayer = false;
 
     void Start()
     {
-        Debug.Log("Fadable");
         boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         if(boxCollider2D == null)
         {
@@ -42,10 +40,8 @@ public class Fadable : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.tag);
         if(collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player!!!");
             bool areCharacterFeetAboveCollider = collision.gameObject.transform.position.y >= transform.position.y;
             if (isCollidingWithPlayer)
             {
@@ -58,7 +54,6 @@ public class Fadable : MonoBehaviour
 
             }
             {
-                Debug.Log(areCharacterFeetAboveCollider);
                 if(areCharacterFeetAboveCollider)
                 {
                     FadeOut();
@@ -84,7 +79,6 @@ public class Fadable : MonoBehaviour
 
     void FadeOut()
     {
-        Debug.Log("FadeOut");
         if(status != "fading out")
         {
             status = "fading out";
@@ -97,10 +91,8 @@ public class Fadable : MonoBehaviour
 
         float t = 0.0f;
         float originalAlpha = spriteRenderer.color.a;
-        Debug.Log("Original alpha: " + originalAlpha + ". newAlpha: " + newAlpha);
         while (t <= duration)
         {
-            Debug.Log(t);
             float alpha = Mathf.Lerp(originalAlpha, newAlpha, t / duration);
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, alpha);
 
